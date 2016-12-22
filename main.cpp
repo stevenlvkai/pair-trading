@@ -55,46 +55,46 @@ void loadData(Stock& S, std::string file) {
 int main(int argc, char* argv[])
 {
 
-	// We load the historical data for S&P 500 and Dow Jones
-	Stock SP500, DJIA;
+	// We load the historical data for S&P 500 and NASDAQ
+	Stock SP500, NASDAQ;
 	loadData(SP500, "SP500.dat");
-	loadData(DJIA, "DJIA.dat");
+	loadData(NASDAQ, "NASDAQ100.dat");
 
 	const double INITIAL_MONEY=1000.0; // Start with 1000$
 	double money=INITIAL_MONEY; // Portfolio worth
-	double portfolio[3]={1.0, -1.0, 1}; // The portfolio {x, y, z} indicates weights in the portfolio of SP500, DJIA and cash, respectively.
+	double portfolio[3]={1.0, -1.0, 1}; // The portfolio {x, y, z} indicates weights in the portfolio of SP500, NASDAQ and cash, respectively.
 	const int DAYS_CONSIDERED=30; // Number of days we consider
 
 	for(int i=DAYS_CONSIDERED; i<SP500.getFilled()-1; i++) {
 		// Update portfolio worth
-		money*=portfolio[2]+portfolio[0]*SP500.getData(i).getPrice()/SP500.getData(i-1).getPrice()+portfolio[1]*DJIA.getData(i).getPrice()/DJIA.getData(i-1).getPrice();
+		money*=portfolio[2]+portfolio[0]*SP500.getData(i).getPrice()/SP500.getData(i-1).getPrice()+portfolio[1]*NASDAQ.getData(i).getPrice()/NASDAQ.getData(i-1).getPrice();
 		
 		// Show current state of portfolio.
-		std::cout<<"> Portfolio weights: \n\t"<<100*portfolio[0]<<"% in SP500\n\t"<<100*portfolio[1]<<"% in DJIA\n\t"<<100*portfolio[2]<<"% in cash\n"<<"  Worth: "<<money<<"$\n  Return: "<<(money/INITIAL_MONEY-1)*100<<"%\n  Date: "<<SP500.getData(i).getDate();
+		std::cout<<"> Portfolio weights: \n\t"<<100*portfolio[0]<<"% in SP500\n\t"<<100*portfolio[1]<<"% in NASDAQ\n\t"<<100*portfolio[2]<<"% in cash\n"<<"  Worth: "<<money<<"$\n  Return: "<<(money/INITIAL_MONEY-1)*100<<"%\n  Date: "<<SP500.getData(i).getDate();
 		std::cout<<"\n\n";
 
 
 		double mean=0, sd=0;
 		for (int j=i-DAYS_CONSIDERED; j<i; j++) {
-			mean+=SP500.getData(j).getPrice()/DJIA.getData(j).getPrice();
-			sd+=pow(SP500.getData(j).getPrice()/DJIA.getData(j).getPrice(),2);
+			mean+=SP500.getData(j).getPrice()/NASDAQ.getData(j).getPrice();
+			sd+=pow(SP500.getData(j).getPrice()/NASDAQ.getData(j).getPrice(),2);
 
 		}
 		mean/=DAYS_CONSIDERED;
 		sd=sqrt(sd/DAYS_CONSIDERED-pow(mean, 2));
-		const double MARGIN=sd;
-		if (SP500.getData(i).getPrice()/DJIA.getData(i).getPrice()>mean+MARGIN) {
-			// SP500 is outperforming DJIA, as their ratio is big. Thus, short SP500 and buy DJIA.
+		const double MARGIN=sd*2;
+		if (SP500.getData(i).getPrice()/NASDAQ.getData(i).getPrice()>mean+MARGIN) {
+			// SP500 is outperforming NASDAQ, as their ratio is big. Thus, short SP500 and buy NASDAQ.
 			portfolio[0]=-1.0;
 			portfolio[1]=1.0;
 			portfolio[2]=1.0;
-		} else if (SP500.getData(i).getPrice()/DJIA.getData(i).getPrice()<mean-MARGIN) {
-			// SP500 is underperforming DJIA, as their ratio is small. Thus, buy SP500 and short DJIA.
+		} else if (SP500.getData(i).getPrice()/NASDAQ.getData(i).getPrice()<mean-MARGIN) {
+			// SP500 is underperforming NASDAQ, as their ratio is small. Thus, buy SP500 and short NASDAQ.
 			portfolio[0]=1.0;
 			portfolio[1]=-1.0;
 			portfolio[2]=1.0;
 		} else {
-			// The ratio of SP500 and DJIA is inside the "normal" values.
+			// The ratio of SP500 and NASDAQ is inside the "normal" values.
 			portfolio[0]=0.0;
 			portfolio[1]=0.0;
 			portfolio[2]=1.0;
