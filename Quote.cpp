@@ -7,8 +7,8 @@
 //          Class that handles the quotes           //
 //       of a certain stock in a certain date       //
 //                                                  //
-//                  Imanol Perez                    //
-//                  December 2016                   //
+//                  Kai Lyu                         //
+//                  April 2019                      //
 //                                                  //
 //////////////////////////////////////////////////////
 
