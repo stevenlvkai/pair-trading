@@ -13,7 +13,7 @@
 
 #include <cmath>
 #include "Exception.hpp"//  This class throws errors using the class "error"
-#include <ctime>
+#include <time.h>
 
 class Quote;
 
@@ -21,9 +21,9 @@ class Quote
 {
 private:
    // member variables
-   double mPrice;   // price of the stock
-   std::string mName; // name of the stock
-   std::string mDate; // date of the quote
+   double mPrice = 0;   // price of the stock
+   std::string mName = ""; // name of the stock
+   std::string mDate = ""; // date of the quote
 
 public:
    Quote(); // constructor
