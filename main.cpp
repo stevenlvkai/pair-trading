@@ -60,6 +60,9 @@ int main(int argc, char* argv[])
 	loadData(SP500, "SP500.dat");
 	loadData(NASDAQ, "NASDAQ100.dat");
 
+	std::ofstream outfile1("C:\\Users\\KAI LYU\\source\\repos\\Pair Trading\\result.txt");
+	outfile1 << "Date,Worth" << std::endl;
+
 	const double INITIAL_MONEY=1000.0; // Start with 1000$
 	double money=INITIAL_MONEY; // Portfolio worth
 	double portfolio[3]={1.0, -1.0, 1}; // The portfolio {x, y, z} indicates weights in the portfolio of SP500, NASDAQ and cash, respectively.
@@ -72,7 +75,7 @@ int main(int argc, char* argv[])
 		// Show current state of portfolio.
 		std::cout<<"> Portfolio weights: \n\t"<<100*portfolio[0]<<"% in SP500\n\t"<<100*portfolio[1]<<"% in NASDAQ\n\t"<<100*portfolio[2]<<"% in cash\n"<<"  Worth: "<<money<<"$\n  Return: "<<(money/INITIAL_MONEY-1)*100<<"%\n  Date: "<<SP500.getData(i).getDate();
 		std::cout<<"\n\n";
-
+		outfile1 << SP500.getData(i).getDate() << "," << money << std::endl;
 
 		double mean=0, sd=0;
 		for (int j=i-DAYS_CONSIDERED; j<i; j++) {
@@ -101,6 +104,8 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	outfile1.close();
+	
 	std::cout<<"\n---------------------------------------------\n";
 	std::cout<< "Results\n\n"<<"  Start date: "<<SP500.getData(0).getDate()<<"\n"<<"  End date: "<<SP500.getData(SP500.getFilled()-2).getDate()<<"\n";
 	std::cout<<"  Return: "<<(money/INITIAL_MONEY-1)*100<<"%";
