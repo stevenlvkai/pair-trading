@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Quote.hpp"
-#include <ctime>
+#include <time.h>
 
 //////////////////////////////////////////////////////
 //                                                  //
@@ -27,7 +27,7 @@ Quote::Quote(std::string name, double price, std::string date)
 
   // date must have the format YYYY/MM/DD
   struct tm tm;
-  if (date!="0000/00/00" && !strptime(date.c_str(), "%Y/%m/%d", &tm)) {
+  if (date!="0000/00/00") {
     throw Exception("Invalid date format", "Date format must be YYYY/MM/DD");
   }
 
@@ -67,7 +67,7 @@ std::string Quote::getDate(void) {
 void Quote::setDate(std::string date) {
   // date must have format YYYY/MM/DD
   struct tm tm;
-  if (date!="0000/00/00" && !strptime(date.c_str(), "%Y/%m/%d", &tm)) {
+  if (date!="0000/00/00") {
     throw Exception("Invalid date format", "Date format must be YYYY/MM/DD");
   }
   
